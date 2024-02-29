@@ -1,0 +1,23 @@
+name: cricket_run_map
+description: "An Awesome Flutter package to create a Wagon Wheel / Run Map widget for Cricket applications."
+version: 0.0.1
+homepage: https://github.com/akshatbhuhagal/cricket_run_map
+repository: https://github.com/akshatbhuhagal/cricket_run_map
+
+environment:
+  sdk: '>=3.2.3 <4.0.0'
+  flutter: ">=1.17.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^2.0.0
+
+flutter:
+
+  assets:
+    - assets/ic_wagon_striker.png
