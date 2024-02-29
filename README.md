@@ -46,7 +46,9 @@ CricketRunMap(
 
 This will give you the following UI:
 
-![Image](https://github.com/akshatbhuhagal/cricket_run_map/assets/screenshot/img.png)
+
+<p align="center"> <img src="https://github.com/akshatbhuhagal/cricket_run_map/blob/master/assets/screenshot/img.png" width="200"> </p>
+
 ## Additional information
 
 As of now this is Alpha Release,
