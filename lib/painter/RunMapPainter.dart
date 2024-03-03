@@ -40,22 +40,6 @@ class RunMapPainter extends CustomPainter {
       fontSize: 12,
     );
 
-    // Draw lines from center to tap point
-    if (tapPoint != null) {
-      final Paint linePaint = Paint()
-        ..color = Colors.red
-        ..style = PaintingStyle.stroke
-        ..strokeWidth = 3;
-      canvas.drawLine(center, tapPoint!, linePaint);
-
-      // Draw dot at the end of the line
-      final Paint dotPaint = Paint()
-        ..color = Colors.red
-        ..style = PaintingStyle.fill;
-      canvas.drawCircle(tapPoint!, 4.0, dotPaint);
-
-    }
-
     for (int i = 0; i < positionNames.length; i++) {
       final Path path = Path();
       path.moveTo(center.dx, center.dy);
@@ -110,6 +94,22 @@ class RunMapPainter extends CustomPainter {
 
       textPainter.paint(canvas, textOffset);
     }
+
+    // Draw lines from center to tap point
+    if (tapPoint != null) {
+      final Paint linePaint = Paint()
+        ..color = Colors.red
+        ..style = PaintingStyle.stroke
+        ..strokeWidth = 3;
+      canvas.drawLine(center, tapPoint!, linePaint);
+
+      // Draw dot at the end of the line
+      final Paint dotPaint = Paint()
+        ..color = Colors.red
+        ..style = PaintingStyle.fill;
+      canvas.drawCircle(tapPoint!, 4.0, dotPaint);
+    }
+
   }
 
   @override
