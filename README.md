@@ -29,27 +29,20 @@ Now you will be able to use the CricketRunMap widget in your build method:
 CricketRunMap(
   width: 350,
   height: 350,
-  leftSide: Text("OFF", style: TextStyle(fontSize: 15, fontWeight: FontWeight.w500, color: Colors.white)),
-  rightSide: Text("LEG", style: TextStyle(fontSize: 15, fontWeight: FontWeight.w500, color: Colors.white)),
-  positionNames: [
-    'Deep Mid\nWicket',
-    'Long On',
-    'Long Off',
-    'Deep Cover',
-    'Deep Point',
-    'Third Man',
-    'Deep\nFine Leg',
-    'Deep\nSquare Leg',
-  ],
-),
+  isRightHand: true, // True = Right Hand Batsman  |  False = Left Hand Batsman
+  onPositionSelected: (String selectedPosition) {
+    // Handle the selected position name here
+    print('Selected position index: $selectedPosition');
+  },
+)
 ```
 
 This will give you the following UI:
 
 
-<p align="center"> <img src="https://github.com/akshatbhuhagal/cricket_run_map/blob/master/assets/screenshot/img.png" width="200"> </p>
+<p align="center"> <img src="https://github.com/akshatbhuhagal/cricket_run_map/blob/master/assets/screenshot/img2.png" width="200"> <img src="https://github.com/akshatbhuhagal/cricket_run_map/blob/master/assets/screenshot/img.png" width="200"> </p>
 
 ## Additional information
 
-As of now this is Alpha Release,
-This package only contains minimum Features, More Features will be added with Final Release.
+Additional features are slated for integration in forthcoming updates, enhancing the functionality and usability of the platform. 
+For customization or further refinement to align with specific preferences, please refer to the GitHub repository provided: https://github.com/akshatbhuhagal/cricket_run_map

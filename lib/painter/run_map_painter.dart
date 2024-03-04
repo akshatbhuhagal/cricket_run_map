@@ -1,9 +1,6 @@
-
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-
-
 
 class RunMapPainter extends CustomPainter {
   final List<String> positionNames;
@@ -12,7 +9,8 @@ class RunMapPainter extends CustomPainter {
   final Color selectedPositionColor;
   final Color groundColor;
 
-  RunMapPainter(this.positionNames, {
+  RunMapPainter(
+    this.positionNames, {
     required this.tapPoint,
     required this.selectedPosition,
     this.selectedPositionColor = Colors.grey,
@@ -32,12 +30,11 @@ class RunMapPainter extends CustomPainter {
     canvas.drawCircle(center, radius, circlePaint);
 
     final double sliceAngle = 2 * pi / positionNames.length;
-    final Paint paint = Paint()
-      ..style = PaintingStyle.fill;
+    final Paint paint = Paint()..style = PaintingStyle.fill;
 
     const textStyle = TextStyle(
       color: Colors.white,
-      fontSize: 12,
+      fontSize: 10,
     );
 
     for (int i = 0; i < positionNames.length; i++) {
@@ -51,6 +48,15 @@ class RunMapPainter extends CustomPainter {
       );
       path.arcTo(
         Rect.fromCircle(center: center, radius: radius),
+        startAngle,
+        sliceAngle,
+        false,
+      );
+      path.close();
+
+      // Inner Circle
+      path.arcTo(
+        Rect.fromCircle(center: center, radius: radius / 2),
         startAngle,
         sliceAngle,
         false,
@@ -82,9 +88,9 @@ class RunMapPainter extends CustomPainter {
         style: textStyle,
       );
       final textPainter = TextPainter(
-        text: textSpan,
-        textDirection: TextDirection.ltr,
-      );
+          text: textSpan,
+          textDirection: TextDirection.ltr,
+          textAlign: TextAlign.center);
       textPainter.layout();
 
       final textOffset = Offset(
@@ -109,7 +115,6 @@ class RunMapPainter extends CustomPainter {
         ..style = PaintingStyle.fill;
       canvas.drawCircle(tapPoint!, 4.0, dotPaint);
     }
-
   }
 
   @override

@@ -23,25 +23,18 @@ class MyApp extends StatelessWidget {
           width: MediaQuery.of(context).size.width,
           height: MediaQuery.of(context).size.height,
           alignment: Alignment.center,
-          child: const CricketRunMap(
+          child: CricketRunMap(
             width: 350,
             height: 350,
-            leftSide: Text("OFF", style: TextStyle(fontSize: 15, fontWeight: FontWeight.w500, color: Colors.white)),
-            rightSide: Text("LEG", style: TextStyle(fontSize: 15, fontWeight: FontWeight.w500, color: Colors.white)),
-            positionNames: [
-              'Deep Mid\nWicket',
-              'Long On',
-              'Long Off',
-              'Deep Cover',
-              'Deep Point',
-              'Third Man',
-              'Deep\nFine Leg',
-              'Deep\nSquare Leg',
-            ],
+            isRightHand:
+                false, // True = Right Hand Batsman  |  False = Left Hand Batsman
+            onPositionSelected: (String selectedPosition) {
+              // Handle the selected position name here
+              print('Selected position index: $selectedPosition');
+            },
           ),
         ),
       ),
     );
   }
 }
-
