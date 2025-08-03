@@ -1,3 +1,7 @@
+## 1.0.2
+
+* Refactor: migrate run map to use dynamic PositionDataModel list and improve painter type safety
+
 ## 1.0.1
 
 * Updated: Documentation Updated
