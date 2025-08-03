@@ -5,11 +5,14 @@ import 'dart:math';
 import 'package:cricket_run_map/painter/run_map_painter.dart';
 import 'package:flutter/material.dart';
 
+import 'model/position_data_model.dart';
+
 class CricketRunMap extends StatefulWidget {
   final double width;
   final double height;
   final bool isRightHand;
-  final void Function(String) onPositionSelected;
+  final void Function(PositionDataModel) onPositionSelected;
+  final List<PositionDataModel>? positions;
 
   const CricketRunMap({
     super.key,
@@ -17,6 +20,7 @@ class CricketRunMap extends StatefulWidget {
     required this.height,
     this.isRightHand = true,
     required this.onPositionSelected,
+    this.positions,
   });
 
   @override
@@ -24,27 +28,37 @@ class CricketRunMap extends StatefulWidget {
 }
 
 class _CricketRunMapState extends State<CricketRunMap> {
-  final List<String> rightHandPositionNames = [
-    'Deep Mid\nWicket',
-    'Long On',
-    'Long Off',
-    'Deep Cover',
-    'Deep Point',
-    'Third Man',
-    'Deep\nFine Leg',
-    'Deep\nSquare Leg',
+
+  final List<PositionDataModel> _defaultRightHandPositions = [
+    PositionDataModel(1, 'Deep Mid\nWicket'),
+    PositionDataModel(2, 'Long On'),
+    PositionDataModel(3, 'Long Off'),
+    PositionDataModel(4, 'Deep Cover'),
+    PositionDataModel(5, 'Deep Point'),
+    PositionDataModel(6, 'Third Man'),
+    PositionDataModel(7, 'Deep\nFine Leg'),
+    PositionDataModel(8, 'Deep\nSquare Leg'),
   ];
 
-  final List<String> leftHandPositionNames = [
-    'Deep Cover',
-    'Long Off',
-    'Long On',
-    'Deep Mid\nWicket',
-    'Deep\nSquare Leg',
-    'Deep\nFine Leg',
-    'Third Man',
-    'Deep Point',
+  final List<PositionDataModel> _defaultLeftHandPositions = [
+    PositionDataModel(1, 'Deep Cover'),
+    PositionDataModel(2, 'Long Off'),
+    PositionDataModel(3, 'Long On'),
+    PositionDataModel(4, 'Deep Mid\nWicket'),
+    PositionDataModel(5, 'Deep\nSquare Leg'),
+    PositionDataModel(6, 'Deep\nFine Leg'),
+    PositionDataModel(7, 'Third Man'),
+    PositionDataModel(8, 'Deep Point'),
   ];
+
+  List<PositionDataModel> get activePositions {
+    if (widget.positions != null && widget.positions!.isNotEmpty) {
+      return widget.positions!;
+    } else {
+      // fallback to default list based on hand
+      return widget.isRightHand ? _defaultRightHandPositions : _defaultLeftHandPositions;
+    }
+  }
 
   Offset? tapPoint;
   int? selectedPosition;
@@ -59,21 +73,13 @@ class _CricketRunMapState extends State<CricketRunMap> {
             final dx = tapPoint!.dx - (widget.width / 2);
             final dy = tapPoint!.dy - (widget.height / 2);
             final angle = atan2(dy, dx);
-            const sliceAngle = 2 * pi / 8;
+            final sliceAngle = 2 * pi / activePositions.length;
             double normalizedAngle = angle < 0 ? (2 * pi + angle) : angle;
             normalizedAngle = (normalizedAngle + (4 * pi / 2)) % (2 * pi);
-            selectedPosition = (normalizedAngle / sliceAngle).floor();
+            selectedPosition = (normalizedAngle / sliceAngle).floor() % activePositions.length;
 
-            // Call the callback with the selected position name
-            if (widget.isRightHand == true) {
-              widget.onPositionSelected.call(
-                  rightHandPositionNames[selectedPosition!]
-                      .replaceAll("\n", " "));
-            } else {
-              widget.onPositionSelected.call(
-                  leftHandPositionNames[selectedPosition!]
-                      .replaceAll("\n", " "));
-            }
+            // Return whole selected position with ID
+            widget.onPositionSelected.call(activePositions[selectedPosition!]);
           }
         });
       },
@@ -101,13 +107,11 @@ class _CricketRunMapState extends State<CricketRunMap> {
             children: [
               CustomPaint(
                 size: Size(widget.width, widget.height),
-                painter: RunMapPainter(
-                    widget.isRightHand
-                        ? rightHandPositionNames
-                        : leftHandPositionNames,
-                    tapPoint: tapPoint,
-                    selectedPosition: selectedPosition),
+                painter: RunMapPainter(activePositions,
+                  tapPoint: tapPoint, selectedPosition: selectedPosition,
+                ),
               ),
+
               Center(
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -119,16 +123,8 @@ class _CricketRunMapState extends State<CricketRunMap> {
                         child: Container(
                           alignment: Alignment.center,
                           child: widget.isRightHand
-                              ? const Text("OFF",
-                                  style: TextStyle(
-                                      fontSize: 15,
-                                      fontWeight: FontWeight.w500,
-                                      color: Colors.white))
-                              : const Text("LEG",
-                                  style: TextStyle(
-                                      fontSize: 15,
-                                      fontWeight: FontWeight.w500,
-                                      color: Colors.white)),
+                              ? const Text("OFF", style: TextStyle(fontSize: 15, fontWeight: FontWeight.w500, color: Colors.white))
+                              : const Text("LEG", style: TextStyle(fontSize: 15, fontWeight: FontWeight.w500, color: Colors.white)),
                         ),
                       ),
                     ),
@@ -138,26 +134,22 @@ class _CricketRunMapState extends State<CricketRunMap> {
                       color: Colors.amberAccent,
                       alignment: Alignment.topCenter,
                       child: SizedBox(
-                          width: 25,
-                          height: 25,
-                          child: widget.isRightHand
-                              ? Image.asset(
-                                  const AssetImage(
-                                          "assets/ic_wagon_striker.png")
-                                      .assetName,
-                                  package: 'cricket_run_map',
-                                  color: Colors.black,
-                                  fit: BoxFit.cover)
-                              : Transform(
-                                  alignment: Alignment.center,
-                                  transform: Matrix4.rotationY(pi),
-                                  child: Image.asset(
-                                      const AssetImage(
-                                              "assets/ic_wagon_striker.png")
-                                          .assetName,
-                                      package: 'cricket_run_map',
-                                      color: Colors.black,
-                                      fit: BoxFit.cover))),
+                        width: 25,
+                        height: 25,
+                        child: widget.isRightHand
+                            ? Image.asset(
+                          const AssetImage("assets/ic_wagon_striker.png").assetName,
+                          package: 'cricket_run_map', color: Colors.black, fit: BoxFit.cover,
+                        )
+                            : Transform(
+                          alignment: Alignment.center,
+                          transform: Matrix4.rotationY(pi),
+                          child: Image.asset(
+                            const AssetImage("assets/ic_wagon_striker.png").assetName,
+                            package: 'cricket_run_map', color: Colors.black, fit: BoxFit.cover,
+                          ),
+                        ),
+                      ),
                     ),
                     Expanded(
                       child: Transform.translate(
@@ -165,16 +157,8 @@ class _CricketRunMapState extends State<CricketRunMap> {
                         child: Container(
                           alignment: Alignment.center,
                           child: widget.isRightHand
-                              ? const Text("LEG",
-                                  style: TextStyle(
-                                      fontSize: 15,
-                                      fontWeight: FontWeight.w500,
-                                      color: Colors.white))
-                              : const Text("OFF",
-                                  style: TextStyle(
-                                      fontSize: 15,
-                                      fontWeight: FontWeight.w500,
-                                      color: Colors.white)),
+                              ? const Text("LEG", style: TextStyle(fontSize: 15, fontWeight: FontWeight.w500, color: Colors.white))
+                              : const Text("OFF", style: TextStyle(fontSize: 15, fontWeight: FontWeight.w500, color: Colors.white)),
                         ),
                       ),
                     ),

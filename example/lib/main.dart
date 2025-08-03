@@ -26,11 +26,10 @@ class MyApp extends StatelessWidget {
           child: CricketRunMap(
             width: 350,
             height: 350,
-            isRightHand:
-                false, // True = Right Hand Batsman  |  False = Left Hand Batsman
-            onPositionSelected: (String selectedPosition) {
+            isRightHand: true, // True = Right Hand Batsman  |  False = Left Hand Batsman
+            onPositionSelected: (selectedPosition) {
               // Handle the selected position name here
-              print('Selected position index: $selectedPosition');
+              debugPrint('Selected position index: ${selectedPosition.id}');
             },
           ),
         ),

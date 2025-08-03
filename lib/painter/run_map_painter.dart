@@ -2,15 +2,17 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 
+import '../model/position_data_model.dart';
+
 class RunMapPainter extends CustomPainter {
-  final List<String> positionNames;
+  final List<PositionDataModel> positions;
   final Offset? tapPoint;
   final int? selectedPosition;
   final Color selectedPositionColor;
   final Color groundColor;
 
   RunMapPainter(
-    this.positionNames, {
+    this.positions, {
     required this.tapPoint,
     required this.selectedPosition,
     this.selectedPositionColor = Colors.grey,
@@ -29,7 +31,7 @@ class RunMapPainter extends CustomPainter {
     // Draw the circle
     canvas.drawCircle(center, radius, circlePaint);
 
-    final double sliceAngle = 2 * pi / positionNames.length;
+    final double sliceAngle = 2 * pi / positions.length;
     final Paint paint = Paint()..style = PaintingStyle.fill;
 
     const textStyle = TextStyle(
@@ -37,7 +39,7 @@ class RunMapPainter extends CustomPainter {
       fontSize: 10,
     );
 
-    for (int i = 0; i < positionNames.length; i++) {
+    for (int i = 0; i < positions.length; i++) {
       final Path path = Path();
       path.moveTo(center.dx, center.dy);
       final double startAngle = sliceAngle * i;
@@ -84,7 +86,7 @@ class RunMapPainter extends CustomPainter {
       final double textCenterY = center.dy + radius * 0.8 * sin(midAngle);
 
       final textSpan = TextSpan(
-        text: positionNames[i],
+        text: positions[i].name, // changed here!
         style: textStyle,
       );
       final textPainter = TextPainter(
